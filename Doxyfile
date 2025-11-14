@@ -1,0 +1,23 @@
+## Doxyfile minimal configuration for this project
+# Generated manually to allow running `doxygen Doxyfile` without `doxygen -g`.
+
+PROJECT_NAME           = "work-stealing-thread-pool"
+OUTPUT_DIRECTORY       = docs/doxygen
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+QUIET                  = NO
+WARNINGS               = YES
+
+# Where to find sources
+INPUT                  = . src/core src/3d_convolution
+RECURSIVE              = YES
+FILE_PATTERNS          = *.hpp *.h *.cpp *.dox
+
+# Extract undocumented stuff too so comments are present in output
+EXTRACT_ALL            = YES
+
+# Skip documentation of the docs output directory
+EXCLUDE_PATTERNS       = docs/*
+
+# Optional: nicer HTML navigation
+GENERATE_TREEVIEW      = YES
