@@ -1,284 +1,56 @@
-/**
- * @mainpage Work-Stealing Thread Pool
- *
- * @section overview Project Overview
- *
- * This project implements a high-performance, work-stealing thread pool in modern C++20.
- * It demonstrates advanced concurrent programming techniques combined with a practical
- * real-world use case: parallel 3D volumetric image filtering for medical imaging and
- * scientific computing applications.
- *
- * The thread pool uses a **work-stealing queue** architecture where each worker thread
- * maintains its own task deque. Owner threads perform LIFO (stack-like) operations for
- * cache locality, while other threads "steal" work in FIFO (queue-like) order when idle.
- * This design achieves excellent load balancing with minimal contention.
- *
- * @section features Key Features
- *
- * - **Work-Stealing Architecture:** Each thread has a local task deque for locality;
- *   idle threads steal from peers for dynamic load balancing.
- * - **C++20 Structured Concurrency:** Uses `std::jthread` for automatic thread joining
- *   and `std::stop_token` for cooperative cancellation.
- * - **Thread-Safe Queues:** Custom `ThreadSafeDeque` with condition variables for
- *   blocking and non-blocking operations.
- * - **3D Volumetric Convolution:** Complete implementation of parallel 3D image filtering
- *   with multiple kernel types (Gaussian blur, Laplacian, directional edge detection).
- * - **Production-Ready:** Proper RAII semantics, graceful shutdown, and comprehensive
- *   error handling.
- *
- * @section modern_cpp Modern C++ Features Applied
- *
- * ### C++20 Features
- *
- * - **`std::jthread`:** Joinable threads with automatic cleanup via RAII. No manual
- *   `join()` calls needed—threads automatically join in the destructor.
- *   - Used in: ThreadPool worker management
- *   - Benefit: Eliminates resource leaks and simplifies shutdown logic
- *
- * - **`std::stop_token` & `std::stop_source`:** Cooperative cancellation mechanism
- *   for safe thread shutdown.
- *   - Used in: Worker thread termination signals
- *   - Benefit: Graceful, non-abrupt shutdown with predictable behavior
- *
- * - **`std::atomic<T>`:** Lock-free synchronization primitives for counters and flags.
- *   - Used in: Task completion tracking and done_ flag
- *   - Benefit: Minimal overhead synchronization without full mutex locks
- *
- * ### C++17 & Earlier (Retroactively Used)
- *
- * - **`std::unique_ptr<T[]>`:** Dynamic arrays with automatic memory management.
- *   - Used in: `work_queues` array (one per thread)
- *   - Benefit: No manual `delete[]`, exception-safe initialization
- *
- * - **`std::unique_ptr<T>`:** For task ownership within deques.
- *   - Used in: Storing tasks in ThreadSafeDeque
- *   - Benefit: Clear ownership semantics, move-friendly, automatic cleanup
- *
- * - **Move Semantics & Perfect Forwarding:** Efficient task and data transfer without copies.
- *   - Used in: Task submission, deque operations
- *   - Benefit: Zero-copy scheduling, optimal performance
- *
- * - **`std::condition_variable`:** Synchronization for blocking waits.
- *   - Used in: ThreadSafeDeque's push/pop operations
- *   - Benefit: Efficient thread parking and waking
- *
- * - **`std::mutex`:** Traditional mutual exclusion for shared data.
- *   - Used in: Protecting deque contents and RNG
- *   - Benefit: Data race prevention, clear critical sections
- *
- * - **Structured Bindings & Auto Types:** Cleaner, more concise code.
- *   - Used in: Loop variables, template deduction
- *   - Benefit: Reduced boilerplate, improved readability
- *
- * ### Design Patterns
- *
- * - **Command Pattern:** ConvolutionTask encapsulates a unit of work (functor).
- * - **RAII (Resource Acquisition Is Initialization):** All resources (threads, queues,
- *   memory) are tied to object lifetime—no manual cleanup needed.
- * - **Lock-Free Design (Where Possible):** Atomic counters for progress tracking minimize
- *   contention.
- * - **Thread Pool Pattern:** Reusable worker threads for amortized scheduling overhead.
- *
- * @section use_case 3D Volumetric Convolution Use Case
- *
- * ### What is 3D Convolution?
- *
- * 3D convolution is a fundamental operation in scientific computing and medical imaging.
- * It applies a small 3x3x3 kernel (filter) to every voxel in a 3D volume, computing a
- * weighted sum of the voxel and its neighbors. Applications include:
- *
- * - **Medical Imaging:** MRI/CT scan denoising, edge detection for surgical planning
- * - **Scientific Simulation:** Diffusion equations, filter smoothing for numerical stability
- * - **Computer Vision:** 3D object detection, feature extraction from volumetric data
- * - **Geophysics:** Seismic data processing, underground resource mapping
- *
- * ### The Problem
- *
- * A naive sequential convolution on a 24×24×24 volume with a 3x3x3 kernel requires:
- * - ~22³ = 10,648 voxel operations
- * - For each voxel: 27 multiplications + 26 additions (kernel size³)
- * - **Total: ~286,000+ floating-point operations**
- *
- * On larger real-world volumes (512×512×512 or more), this becomes prohibitively slow.
- *
- * ### The Solution: Parallel 3D Convolution
- *
- * This project demonstrates how the work-stealing thread pool efficiently parallelizes
- * 3D convolution:
- *
- * #### Task Decomposition
- * - The 3D volume is sliced along the z-axis (depth).
- * - Each z-slice is one task: `ConvolutionTask(z_start, z_end)`.
- * - For a 24×24×24 volume: 22 independent convolution tasks (excluding borders).
- * - Each task is submitted to a random thread's queue.
- *
- * #### Work Distribution
- * - **If a thread has local work:** Execute LIFO (stack order) from its own queue.
- *   - Benefits: Cache warm data, reduced memory traffic.
- * - **If idle:** Steal from a random peer's queue in FIFO order.
- *   - Benefits: Load balancing, no busy-spinning.
- *
- * #### Synchronization
- * - An atomic counter tracks completed z-slices.
- * - Main thread polls the counter with a lightweight sleep (1ms).
- * - When counter reaches expected value, all work is done.
- *
- * ### Filters Implemented
- *
- * Three filter types demonstrate the framework's generality:
- *
- * 1. **Gaussian Blur (3x3x3 Uniform Average)**
- *    - Kernel: All weights = 1/27
- *    - Effect: Smoothing, noise reduction
- *    - Use case: Pre-filtering for robust feature extraction
- *
- * 2. **Laplacian Edge Detector**
- *    - Kernel: Center = 6, neighbors = -1
- *    - Effect: Highlights high-curvature regions and edges
- *    - Use case: Identifying boundaries between tissues
- *
- * 3. **Z-Axis Edge Detector (Directional)**
- *    - Kernel: Front voxel = +1, back voxel = -1, rest = 0
- *    - Effect: Detects depth-wise discontinuities
- *    - Use case: Layered structure detection
- *
- * ### Input Data Synthesis
- *
- * The demo generates a realistic synthetic 3D volume:
- * - **Background:** 10.0 (low intensity)
- * - **Central Cube:** 100.0 (z=5 to 19, y=5 to 19, x=5 to 19)
- * - **Gaussian Noise:** Mean=0, StdDev=8 (added everywhere for realism)
- *
- * This simulates a medical imaging scenario (e.g., tumor in background tissue with noise).
- *
- * ### Performance Metrics
- *
- * The program outputs:
- * - **Thread count:** Based on hardware concurrency (capped at 4 for demo)
- * - **Task count:** Number of z-slices processed
- * - **Execution time:** Milliseconds for parallel filtering
- * - **Sample values:** Center and edge voxel results for verification
- * - **Noise analysis:** Standard deviation before/after filtering (for blur kernel)
- *
- * On a modern multi-core system, the work-stealing pool typically achieves:
- * - **90%+ utilization** of available cores
- * - **Near-linear speedup** with thread count (up to core count)
- *
- * @section architecture Project Architecture
- *
- * ```
- * ThreadPool
- * ├── Worker threads (jthreads)
- * ├── Work queues (ThreadSafeDeque)
- * │   ├── Mutex (mut_)
- * │   ├── Condition variables (cv_not_empty_, cv_not_full_)
- * │   └── std::deque<std::unique_ptr<TaskFunc>>
- * └── RNG for work stealing
- *
- * ConvolutionTask (Functor)
- * ├── Input & output volumes (references)
- * ├── Kernel weights (reference)
- * ├── Slice range (z_start, z_end)
- * └── Completion counter (atomic reference)
- *
- * Main Program
- * ├── Initialize ThreadPool
- * ├── Create 24×24×24 volume with cube + noise
- * ├── Submit convolution tasks for each filter
- * ├── Wait for completion
- * └── Print results
- * ```
- *
- * @section files Project Files
- *
- * - **`src/core/thread_pool.hpp`:** Core work-stealing thread pool implementation
- * - **`src/core/thread_safe_deque.hpp`:** Thread-safe LIFO/FIFO deque primitive
- * - **`src/3d_convolution/convolution.hpp`:** 3D convolution task and helper functions
- * - **`src/3d_convolution/main.cpp`:** Demo program entry point
- * - **`Doxyfile`:** Doxygen configuration for generating HTML documentation
- *
- * @section building Building & Running
- *
- * ### Prerequisites
- * - C++20 capable compiler (GCC 10+, Clang 12+, MSVC 2019+)
- * - CMake (optional, or use direct compilation)
- * - Doxygen (for documentation generation)
- *
- * ### Compilation
- *
- * ```bash
- * cd /path/to/work-stealing-thread-pool
- * g++ -std=c++20 -O3 -pthread src/3d_convolution/main.cpp -o demo
- * ```
- *
- * Or with clang:
- * ```bash
- * clang++ -std=c++20 -O3 -pthread src/3d_convolution/main.cpp -o demo
- * ```
- *
- * ### Running
- *
- * ```bash
- * ./demo
- * ```
- *
- * Expected output:
- * ```
- * ThreadPool starting with 4 worker threads.
- * Input initialized with background (10.0), central cube (100.0), AND Gaussian noise (stdev=8).
- *
- * [Filter: 3D Gaussian Blur (Noise Reduction)] Submitted 22 tasks.
- * Time taken for parallel processing: XXX ms
- * ... (more filter outputs)
- *
- * All filtering complete. The ThreadPool destructor will now run.
- * ThreadPool shutting down cleanly. All jthreads joined.
- * ```
- *
- * ### Documentation
- *
- * ```bash
- * doxygen Doxyfile
- * open docs/doxygen/html/index.html
- * ```
- *
- * @section learning_outcomes Learning Outcomes
- *
- * By studying this project, you will understand:
- * 1. **Work-Stealing Algorithms:** How load-balancing queues improve performance
- * 2. **C++20 Concurrency:** Modern thread management with jthreads and stop tokens
- * 3. **Lock-Free Programming:** Atomic operations and minimal synchronization
- * 4. **Task Parallelism:** Decomposing problems into independent, parallelizable units
- * 5. **Cache Locality:** Why LIFO scheduling for local work matters
- * 6. **3D Image Processing:** Convolution kernels and their applications
- * 7. **RAII & Modern C++:** Exception-safe resource management
- *
- * @section future_work Future Enhancements
- *
- * Potential extensions:
- * - **GPU Acceleration:** CUDA/OpenCL backend for massive parallelism
- * - **Adaptive Task Sizing:** Dynamically split large tasks for better load balancing
- * - **Custom Allocators:** Pool-based memory allocation to reduce fragmentation
- * - **Profiling & Metrics:** Detailed timing per worker thread and queue statistics
- * - **Generalized Kernels:** Template support for arbitrary kernel sizes
- * - **Batch Processing:** Queuing multiple volumes for pipeline parallelism
- *
- * @section license License
- *
- * This project is provided as-is for educational and research purposes.
- *
- * @section author Author & Attribution
- *
- * **Author:** dssregi  
- * **Date:** November 14, 2025  
- * **Course:** Udemy Learn Multithreading with Modern C++ (https://www.udemy.com/course/learn-modern-cplusplus-concurrency/) by James Raynard (https://www.udemy.com/user/jamesraynard/)
- *
- * Inspired by work-stealing schedulers in languages like Cilk and Tokio.
- */
+# Work-Stealing Thread Pool
 
-# Work-Stealing Thread Pool with 3D Volumetric Convolution
+This repository implements a high-performance, work-stealing thread pool in modern C++20
+and demonstrates its use with a parallel 3D volumetric convolution example (Gaussian blur,
+Laplacian, and directional edge detection).
 
-A high-performance C++20 work-stealing thread pool demonstrating modern concurrency patterns applied to parallel 3D image filtering.
+## Quick Start
+
+Compile and run the demo:
+
+```bash
+g++ -std=c++20 -O3 -pthread src/3d_convolution/main.cpp -o demo
+./demo
+```
+
+Generate the Doxygen HTML documentation and open the index:
+
+```bash
+doxygen Doxyfile
+xdg-open docs/doxygen/html/index.html
+```
+
+## Key Features
+
+- Work-stealing thread pool using `std::jthread` and `std::stop_token`
+- Thread-safe deque primitive (`ThreadSafeDeque`) supporting owner LIFO and stealer FIFO
+- Parallel 3D convolution with task decomposition per depth slice
+- Clear examples of modern C++ concurrency and RAII patterns
+
+## Project Layout
+
+- `src/core/thread_pool.hpp` — work-stealing thread pool implementation
+- `src/core/thread_safe_deque.hpp` — thread-safe deque implementation
+- `src/3d_convolution/convolution.hpp` — convolution task and helpers
+- `src/3d_convolution/main.cpp` — demo entry point
+- `Doxyfile` — Doxygen configuration
+
+## 3D Convolution Use Case
+
+The demo synthesizes a 24×24×24 volumetric image with a central high-intensity cube and
+Gaussian noise, then applies 3×3×3 filters in parallel (one task per z-slice). This
+demonstrates how to decompose a volumetric computation into parallel tasks and how
+work-stealing balances load across worker threads.
+
+## Notes
+
+- The demo caps worker threads to a small number for predictable output; adjust in
+	`ThreadPool` constructor if you want to benchmark on larger core counts.
+- The `README.md` is used as the Doxygen main page (`USE_MDFILE_AS_MAINPAGE = README.md`).
+
+---
+
+**Author:** dssregi — November 14, 2025
 
 ## Quick Start
 
@@ -342,3 +114,7 @@ doxygen Doxyfile
 ---
 
 **Author:** dssregi | **Date:** November 14, 2025
+
+## Credits
+
+For full author and course attribution, see the [CREDITS](CREDITS.md) file.
