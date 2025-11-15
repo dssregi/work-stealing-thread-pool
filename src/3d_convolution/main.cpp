@@ -71,6 +71,7 @@ int main() {
      * @brief Z-axis edge detector: first derivative along the depth axis.
      * Sensitive to depth-wise discontinuities.
      */
+    std::vector<float> Z_EDGE_KERNEL(27, 0.0f);
     Z_EDGE_KERNEL[13 + 9] = 1.0f;   
     Z_EDGE_KERNEL[13 - 9] = -1.0f;  
 

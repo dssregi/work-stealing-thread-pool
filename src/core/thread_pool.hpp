@@ -176,9 +176,7 @@ public:
  * @brief Constructor implementation: initialize threads and queues.
  */
 inline ThreadPool::ThreadPool() {
-    thread_count = std::max(1, (int)std::thread::hardware_concurrency() - 1);
-    // Use a fixed low number of threads for predictable demo output
-    thread_count = std::min(thread_count, 4); 
+    thread_count = std::max(1, (int)std::thread::hardware_concurrency());
     std::cout << "ThreadPool starting with " << thread_count << " worker threads." << std::endl;
 
     std::random_device rd;
