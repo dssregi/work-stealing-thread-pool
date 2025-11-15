@@ -271,7 +271,7 @@
  *
  * **Author:** dssregi  
  * **Date:** November 14, 2025  
- * **Course:** Udemy C++ Advanced Concurrency & Parallelism  
+ * **Course:** Udemy Learn Multithreading with Modern C++ (https://www.udemy.com/course/learn-modern-cplusplus-concurrency/) by James Raynard (https://www.udemy.com/user/jamesraynard/)
  *
  * Inspired by work-stealing schedulers in languages like Cilk and Tokio.
  */
