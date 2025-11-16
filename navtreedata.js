@@ -25,8 +25,6 @@
 var NAVTREE =
 [
   [ "work-stealing-thread-pool", "index.html", [
-    [ "Work-Stealing Thread Pool", "index.html", "index" ],
-    [ "Credits & Attribution", "md_CREDITS.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
