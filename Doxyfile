@@ -11,11 +11,12 @@ WARNINGS               = YES
 # Where to find sources
 INPUT                  = . src/core src/3d_convolution
 RECURSIVE              = YES
-FILE_PATTERNS          = *.hpp *.h *.cpp *.dox *.md
+FILE_PATTERNS          = *.hpp *.h *.cpp *.dox
 
 # Enable Markdown support and use README.md as the Doxygen main page.
 MARKDOWN_SUPPORT      = YES
 USE_MDFILE_AS_MAINPAGE = README.md
+EXCLUDE_PATTERNS       = docs/* *.md
 
 # Extract undocumented stuff too so comments are present in output
 EXTRACT_ALL            = YES
