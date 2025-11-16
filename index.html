@@ -93,6 +93,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a> This repository implements a high-performance, work-stealing thread pool in modern C++20 and demonstrates its use with a parallel 3D volumetric convolution example (Gaussian blur, Laplacian, and directional edge detection).</p>
+<p><a href="https://github.com/dssregi/work-stealing-thread-pool/actions/workflows/doxygen.yml"><img src="https://github.com/dssregi/work-stealing-thread-pool/actions/workflows/doxygen.yml/badge.svg" alt="Doxygen CI" style="pointer-events: none;" class="inline"/></a></p>
+<p>Documentation: <a href="https://dssregi.github.io/work-stealing-thread-pool/">https://dssregi.github.io/work-stealing-thread-pool/</a></p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Quick Start</h1>
 <p>Compile and run the demo:</p>
@@ -124,7 +126,6 @@ Project Layout</h1>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Notes</h1>
 <ul>
-<li>The demo caps worker threads to a small number for predictable output; adjust in <code><a class="el" href="classThreadPool.html" title="Work-stealing thread pool for parallel task execution.">ThreadPool</a></code> constructor if you want to benchmark on larger core counts.</li>
 <li>The <code><a class="el" href="README_8md.html">README.md</a></code> is used as the Doxygen main page (<code>USE_MDFILE_AS_MAINPAGE = <a class="el" href="README_8md.html">README.md</a></code>).</li>
 </ul>
 <hr  />
