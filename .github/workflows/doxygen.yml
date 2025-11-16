@@ -1,5 +1,10 @@
 name: Build and deploy Doxygen
 
+# Grant explicit write permission for repository contents so the workflow
+# can push the generated docs using the provided GITHUB_TOKEN.
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main ]
@@ -10,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Ensure the checkout action leaves valid credentials for pushes
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Install dependencies
         run: |
