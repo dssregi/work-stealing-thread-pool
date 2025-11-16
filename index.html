@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>work-stealing-thread-pool: Main Page</title>
+<title>work-stealing-thread-pool: Work-Stealing Thread Pool</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -88,10 +88,109 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div>
 </div>
 
-<div class="header">
-  <div class="headertitle"><div class="title">work-stealing-thread-pool Documentation</div></div>
+<div><div class="header">
+  <div class="headertitle"><div class="title">Work-Stealing Thread Pool </div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p><a class="anchor" id="md_README"></a> This repository implements a high-performance, work-stealing thread pool in modern C++20 and demonstrates its use with a parallel 3D volumetric convolution example (Gaussian blur, Laplacian, and directional edge detection).</p>
+<p><a href="https://github.com/dssregi/work-stealing-thread-pool/actions/workflows/doxygen.yml"><img src="https://github.com/dssregi/work-stealing-thread-pool/actions/workflows/doxygen.yml/badge.svg" alt="Doxygen CI" style="pointer-events: none;" class="inline"/></a></p>
+<p>Documentation: <a href="https://dssregi.github.io/work-stealing-thread-pool/">https://dssregi.github.io/work-stealing-thread-pool/</a></p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Quick Start</h1>
+<p>Compile and run the demo:</p>
+<div class="fragment"><div class="line">g++ -std=c++20 -O3 -pthread src/3d_convolution/main.cpp -o demo</div>
+<div class="line">./demo</div>
+</div><!-- fragment --><p>Generate the Doxygen HTML documentation and open the index:</p>
+<div class="fragment"><div class="line">doxygen Doxyfile</div>
+<div class="line">xdg-open docs/doxygen/html/index.html</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+Key Features</h1>
+<ul>
+<li>Work-stealing thread pool using <code>std::jthread</code> and <code>std::stop_token</code></li>
+<li>Thread-safe deque primitive (<code><a class="el" href="classThreadSafeDeque.html" title="Thread-safe work-stealing deque template.">ThreadSafeDeque</a></code>) supporting owner LIFO and stealer FIFO</li>
+<li>Parallel 3D convolution with task decomposition per depth slice</li>
+<li>Clear examples of modern C++ concurrency and RAII patterns</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Project Layout</h1>
+<ul>
+<li><code><a class="el" href="thread__pool_8hpp.html" title="C++20 work-stealing thread pool implementation.">src/core/thread_pool.hpp</a></code> — work-stealing thread pool implementation</li>
+<li><code><a class="el" href="thread__safe__deque_8hpp.html" title="Thread-safe work-stealing deque declaration.">src/core/thread_safe_deque.hpp</a></code> — thread-safe deque implementation</li>
+<li><code><a class="el" href="convolution_8hpp.html" title="3D volumetric convolution tasks for parallel image filtering.">src/3d_convolution/convolution.hpp</a></code> — convolution task and helpers</li>
+<li><code><a class="el" href="main_8cpp.html" title="Main entry point for the 3D volumetric filtering demo.">src/3d_convolution/main.cpp</a></code> — demo entry point</li>
+<li><code>Doxyfile</code> — Doxygen configuration</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md5"></a>
+3D Convolution Use Case</h1>
+<p>The demo synthesizes a 24×24×24 volumetric image with a central high-intensity cube and Gaussian noise, then applies 3×3×3 filters in parallel (one task per z-slice). This demonstrates how to decompose a volumetric computation into parallel tasks and how work-stealing balances load across worker threads.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Notes</h1>
+<ul>
+<li>The <code><a class="el" href="README_8md.html">README.md</a></code> is used as the Doxygen main page (<code>USE_MDFILE_AS_MAINPAGE = <a class="el" href="README_8md.html">README.md</a></code>).</li>
+</ul>
+<hr  />
+<p><b>Author:</b> dssregi — November 14, 2025</p>
+<h1><a class="anchor" id="autotoc_md8"></a>
+Quick Start</h1>
+<div class="fragment"><div class="line"># Compile</div>
+<div class="line">g++ -std=c++20 -O3 -pthread src/3d_convolution/main.cpp -o demo</div>
+<div class="line"> </div>
+<div class="line"># Run</div>
+<div class="line">./demo</div>
+<div class="line"> </div>
+<div class="line"># Generate documentation</div>
+<div class="line">doxygen Doxyfile</div>
+<div class="line">open docs/doxygen/html/index.html</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md9"></a>
+Key Features</h1>
+<ul>
+<li><b>C++20 Work-Stealing Thread Pool</b> with <code>std::jthread</code> and <code>std::stop_token</code></li>
+<li><b>Thread-Safe Lock-Free Deques</b> using <code>std::atomic</code> and condition variables</li>
+<li><b>Parallel 3D Convolution</b> with multiple filter kernels (blur, Laplacian, edge detection)</li>
+<li><b>Realistic Synthetic Data</b> with noise for testing filter effectiveness</li>
+<li><b>Performance Metrics</b> and verification output</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md10"></a>
+Architecture</h1>
+<ul>
+<li><b><a class="el" href="classThreadPool.html" title="Work-stealing thread pool for parallel task execution.">ThreadPool</a>:</b> Manages worker threads and distributes tasks across queues</li>
+<li><b><a class="el" href="classThreadSafeDeque.html" title="Thread-safe work-stealing deque template.">ThreadSafeDeque</a>:</b> LIFO (owner) / FIFO (stealing) task queue per thread</li>
+<li><b><a class="el" href="classConvolutionTask.html" title="Command object (Functor) for executing 3D convolution on depth slices.">ConvolutionTask</a>:</b> Functor encapsulating z-slice convolution work</li>
+<li><b>3D Filters:</b> Gaussian blur, Laplacian, Z-axis edge detection</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md11"></a>
+Modern C++ Highlights</h1>
+<ul>
+<li><code>std::jthread</code> for automatic thread joining</li>
+<li><code>std::stop_token</code> for cooperative cancellation</li>
+<li><code>std::unique_ptr</code> for automatic memory management</li>
+<li>Move semantics and perfect forwarding</li>
+<li>Lock-free atomics for progress tracking</li>
+<li>RAII for exception-safe resource management</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md12"></a>
+Use Case: Medical Imaging</h1>
+<p>Processes synthetic 24×24×24 volumetric data (simulating medical scan) with:</p><ul>
+<li>Background tissue (intensity 10)</li>
+<li>Central tumor/feature (intensity 100)</li>
+<li>Realistic Gaussian noise</li>
+</ul>
+<p>Applies three types of 3×3×3 convolution filters in parallel for:</p><ul>
+<li>Noise reduction (Gaussian blur)</li>
+<li>Edge/feature detection (Laplacian)</li>
+<li>Directional analysis (Z-axis edge detector)</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md13"></a>
+Documentation</h1>
+<p>See the full <b>Doxygen documentation</b> for detailed API reference, class hierarchies, and implementation details. After generating HTML:</p>
+<div class="fragment"><div class="line">doxygen Doxyfile</div>
+<div class="line"># Opens to: docs/doxygen/html/index.html</div>
+</div><!-- fragment --><hr  />
+<p><b>Author:</b> dssregi | <b>Date:</b> November 14, 2025</p>
+<h1><a class="anchor" id="autotoc_md15"></a>
+Credits</h1>
+<p>For full author and course attribution, see the <a class="el" href="md_CREDITS.html">CREDITS</a> file. </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
