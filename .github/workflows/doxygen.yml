@@ -16,8 +16,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz
 
+      - name: Prepare output directory
+        run: |
+          mkdir -p docs/doxygen
+
       - name: Run Doxygen
         run: doxygen Doxyfile
+
+      - name: List generated docs (for CI debugging)
+        run: |
+          echo "Listing docs/doxygen/html (if any):"
+          ls -la docs/doxygen/html || true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
