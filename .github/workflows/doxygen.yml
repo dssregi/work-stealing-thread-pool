@@ -32,11 +32,6 @@ jobs:
       - name: Run Doxygen
         run: doxygen Doxyfile
 
-      - name: List generated docs (for CI debugging)
-        run: |
-          echo "Listing docs/doxygen/html (if any):"
-          ls -la docs/doxygen/html || true
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

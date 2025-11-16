@@ -4,6 +4,10 @@ This repository implements a high-performance, work-stealing thread pool in mode
 and demonstrates its use with a parallel 3D volumetric convolution example (Gaussian blur,
 Laplacian, and directional edge detection).
 
+[![Doxygen CI](https://github.com/dssregi/work-stealing-thread-pool/actions/workflows/doxygen.yml/badge.svg)](https://github.com/dssregi/work-stealing-thread-pool/actions/workflows/doxygen.yml)
+
+Documentation: https://dssregi.github.io/work-stealing-thread-pool/
+
 ## Quick Start
 
 Compile and run the demo:
@@ -44,8 +48,6 @@ work-stealing balances load across worker threads.
 
 ## Notes
 
-- The demo caps worker threads to a small number for predictable output; adjust in
-	`ThreadPool` constructor if you want to benchmark on larger core counts.
 - The `README.md` is used as the Doxygen main page (`USE_MDFILE_AS_MAINPAGE = README.md`).
 
 ---
