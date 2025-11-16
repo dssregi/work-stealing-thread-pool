@@ -1,0 +1,32 @@
+<map id="src/core/thread_pool.hpp" name="src/core/thread_pool.hpp">
+<area shape="rect" id="Node000001" title="C++20 work&#45;stealing thread pool implementation." alt="" coords="290,5,473,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,69,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="319,33,83,81,82,76,318,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="94,79,157,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="341,33,171,80,169,75,339,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="181,79,267,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,33,263,75,261,71,355,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="223,152,300,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="374,33,282,143,278,140,369,29"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="644,79,716,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="430,28,631,76,630,81,429,33"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="324,152,388,177"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="382,32,363,139,358,138,377,31"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="740,79,833,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="451,28,727,76,726,81,450,33"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="857,79,943,104"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="473,26,642,46,844,76,844,81,641,52,472,32"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="412,152,492,177"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="390,30,443,138,438,141,385,32"/>
+<area shape="rect" id="Node000011" href="$thread__safe__deque_8hpp.html" title="Thread&#45;safe work&#45;stealing deque declaration." alt="" coords="445,79,619,104"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="407,28,496,70,494,75,404,33"/>
+<area shape="poly" id="edge12_Node000011_Node000005" title=" " alt="" coords="489,107,314,152,313,147,488,101"/>
+<area shape="poly" id="edge13_Node000011_Node000007" title=" " alt="" coords="505,106,399,149,397,144,503,102"/>
+<area shape="poly" id="edge16_Node000011_Node000010" title=" " alt="" coords="521,106,477,145,473,141,517,102"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="517,152,579,177"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="537,104,545,138,540,139,532,105"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="603,152,746,177"/>
+<area shape="poly" id="edge14_Node000011_Node000013" title=" " alt="" coords="556,102,640,143,638,148,554,106"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="771,152,837,177"/>
+<area shape="poly" id="edge15_Node000011_Node000014" title=" " alt="" coords="576,101,757,148,756,154,575,107"/>
+</map>

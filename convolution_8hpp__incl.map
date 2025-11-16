@@ -1,0 +1,47 @@
+<map id="src/3d_convolution/convolution.hpp" name="src/3d_convolution/convolution.hpp">
+<area shape="rect" id="Node000001" title="3D volumetric convolution tasks for parallel image filtering." alt="" coords="410,5,554,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="289,240,369,265"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="411,39,304,58,182,86,125,103,75,123,37,145,13,168,8,180,13,190,29,203,55,215,125,231,204,242,276,247,275,252,204,247,124,237,53,220,27,208,8,194,3,180,8,165,34,140,73,118,123,98,181,81,302,53,410,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="23,167,86,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="411,46,328,68,239,96,158,130,90,163,87,158,156,125,238,91,326,62,409,41"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="581,93,640,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="515,43,581,84,579,88,512,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="110,167,182,192"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="420,48,358,69,293,96,230,129,177,161,174,157,227,124,291,91,356,64,419,43"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="953,240,1020,265"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="496,44,527,82,547,101,570,116,623,136,672,142,717,139,761,132,804,126,849,126,895,137,945,165,959,177,970,193,983,225,978,227,965,196,955,181,942,169,894,142,848,132,805,132,762,138,718,144,671,147,622,141,568,121,544,105,523,86,492,47"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="664,93,730,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="535,43,654,86,652,91,533,48"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="755,93,818,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="555,43,742,90,741,96,554,48"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="206,167,292,192"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="421,48,373,68,325,95,292,125,267,157,263,153,289,122,322,91,370,63,419,43"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="842,93,928,119"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="555,38,829,90,828,96,554,43"/>
+<area shape="rect" id="Node000011" href="$thread__pool_8hpp.html" title="C++20 work&#45;stealing thread pool implementation." alt="" coords="336,93,506,119"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="470,47,441,84,437,81,466,44"/>
+<area shape="poly" id="edge19_Node000011_Node000002" title=" " alt="" coords="416,121,346,230,342,227,411,118"/>
+<area shape="poly" id="edge12_Node000011_Node000003" title=" " alt="" coords="351,121,100,169,99,164,350,116"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="378,121,196,168,195,163,376,116"/>
+<area shape="poly" id="edge18_Node000011_Node000009" title=" " alt="" coords="395,121,291,164,289,159,392,116"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="734,167,798,192"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="485,116,722,164,721,169,484,121"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="823,167,910,192"/>
+<area shape="poly" id="edge13_Node000011_Node000013" title=" " alt="" coords="504,116,810,164,809,169,503,121"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="840,240,917,265"/>
+<area shape="poly" id="edge14_Node000011_Node000014" title=" " alt="" coords="507,114,767,144,924,165,932,182,928,200,917,217,904,232,900,229,913,214,923,198,926,182,921,169,766,149,506,119"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="448,240,512,265"/>
+<area shape="poly" id="edge16_Node000011_Node000015" title=" " alt="" coords="417,120,405,153,403,173,408,191,424,213,446,231,443,235,420,217,403,193,398,173,400,152,412,118"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="417,167,510,192"/>
+<area shape="poly" id="edge17_Node000011_Node000016" title=" " alt="" coords="430,118,452,154,448,156,426,120"/>
+<area shape="rect" id="Node000017" href="$thread__safe__deque_8hpp.html" title="Thread&#45;safe work&#45;stealing deque declaration." alt="" coords="535,167,710,192"/>
+<area shape="poly" id="edge20_Node000011_Node000017" title=" " alt="" coords="454,116,578,159,576,165,453,121"/>
+<area shape="poly" id="edge26_Node000017_Node000002" title=" " alt="" coords="576,195,383,241,382,236,575,189"/>
+<area shape="poly" id="edge25_Node000017_Node000006" title=" " alt="" coords="682,189,930,237,940,240,939,245,929,243,681,195"/>
+<area shape="poly" id="edge22_Node000017_Node000014" title=" " alt="" coords="664,189,827,234,826,240,663,195"/>
+<area shape="poly" id="edge23_Node000017_Node000015" title=" " alt="" coords="601,194,516,236,514,231,598,190"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="563,240,626,265"/>
+<area shape="poly" id="edge21_Node000017_Node000018" title=" " alt="" coords="620,193,606,228,602,226,615,191"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="650,240,792,265"/>
+<area shape="poly" id="edge24_Node000017_Node000019" title=" " alt="" coords="640,190,696,230,693,234,637,194"/>
+</map>
